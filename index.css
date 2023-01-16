@@ -34,3 +34,8 @@
   display: flex;
   flex-wrap: wrap;
 }
+
+.menu-list {
+  display: flex;
+  flex-wrap: wrap;
+}

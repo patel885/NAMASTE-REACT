@@ -1,21 +1,38 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 
 import RestaurantCard from "./RestaurantCard";
-import { restaurantList } from "../config";
+import Shimmer from "./Shimmer";
 
 const Body = () => {
-  const [restaurants, setRestaurants] = useState(restaurantList);
+  const [restaurants, setRestaurants] = useState([]);
+  const [filteredRestaurants, setFilteredRestaurants] = useState([]);
   const [searchText, setSearchText] = useState();
 
   function filterData(searchText, restaurants) {
-    const filteredData = restaurants.filter(
-      (restaurant) =>
-        restaurant.data.name?.toLowerCase() === searchText?.toLowerCase()
+    if (!searchText) return restaurants;
+    const filteredData = restaurants.filter((restaurant) =>
+      restaurant?.data?.name?.toLowerCase()?.includes(searchText.toLowerCase())
     );
-    setRestaurants(filteredData);
+    setFilteredRestaurants(filteredData);
   }
 
-  return (
+  useEffect(() => {
+    getRestaurants();
+  }, []);
+
+  async function getRestaurants() {
+    const data = await fetch(
+      "https://www.swiggy.com/dapi/restaurants/list/v5?lat=12.9351929&lng=77.62448069999999&page_type=DESKTOP_WEB_LISTING"
+    );
+    const result = await data.json();
+    setRestaurants(result?.data?.cards[2]?.data?.data?.cards);
+    setFilteredRestaurants(result?.data?.cards[2]?.data?.data?.cards);
+  }
+
+  return restaurants?.length === 0 ? (
+    <Shimmer />
+  ) : (
     <>
       <div className="search-container">
         <input
@@ -38,9 +55,14 @@ const Body = () => {
       </div>
 
       <div className="restaurant-list">
-        {restaurants.map((restaurant) => {
+        {filteredRestaurants?.map((restaurant) => {
           return (
-            <RestaurantCard {...restaurant.data} key={restaurant.data.id} />
+            <Link
+              to={"/restaurant/" + restaurant.data.id}
+              key={restaurant.data.id}
+            >
+              <RestaurantCard {...restaurant.data} />
+            </Link>
           );
         })}
       </div>
