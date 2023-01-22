@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import useOnline from "../utils/useOnline";
 
 const Title = () => {
   return (
@@ -13,9 +14,12 @@ const Title = () => {
 };
 
 const Header = () => {
+  const isOnline = useOnline();
+
   return (
     <div className="header">
       <Title />
+      {isOnline ? "🟩" : "🟥"}
       <div className="nav-items">
         <ul>
           <Link to="/">
@@ -27,6 +31,9 @@ const Header = () => {
           </Link>
           <Link to="/contact">
             <li>Contact</li>
+          </Link>
+          <Link to="/instamart">
+            <li>Instamart</li>
           </Link>
           <li>Cart</li>
         </ul>

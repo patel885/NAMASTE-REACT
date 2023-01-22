@@ -3,19 +3,12 @@ import { Link } from "react-router-dom";
 
 import RestaurantCard from "./RestaurantCard";
 import Shimmer from "./Shimmer";
+import { filterData } from "../utils/common";
 
 const Body = () => {
   const [restaurants, setRestaurants] = useState([]);
   const [filteredRestaurants, setFilteredRestaurants] = useState([]);
   const [searchText, setSearchText] = useState();
-
-  function filterData(searchText, restaurants) {
-    if (!searchText) return restaurants;
-    const filteredData = restaurants.filter((restaurant) =>
-      restaurant?.data?.name?.toLowerCase()?.includes(searchText.toLowerCase())
-    );
-    setFilteredRestaurants(filteredData);
-  }
 
   useEffect(() => {
     getRestaurants();
@@ -47,7 +40,8 @@ const Body = () => {
         <button
           type="submit"
           onClick={() => {
-            filterData(searchText, restaurants);
+            const data = filterData(searchText, restaurants);
+            setFilteredRestaurants(data);
           }}
         >
           Search
