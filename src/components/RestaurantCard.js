@@ -7,7 +7,7 @@ const RestaurantCard = ({
   lastMileTravelString,
 }) => {
   return (
-    <div className="w-56 p-2 m-2 shadow-lg bg-orange-100 border-solid">
+    <div className="w-56 p-2 m-2 shadow-lg bg-orange-50">
       <img src={IMG_CDN_URL + cloudinaryImageId} />
       <h2 className="font-bold text-xl">{name}</h2>
       <h4>{cuisines.join(",")}</h4>
